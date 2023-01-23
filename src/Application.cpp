@@ -20,6 +20,8 @@ namespace VKE {
       glfwPollEvents();
       DrawFrame();
     }
+
+    vkDeviceWaitIdle(m_Device.DeviceHandle());
   }
 
   void Application::CreatePipelineLayout() {
