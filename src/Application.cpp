@@ -6,6 +6,7 @@
 
 namespace VKE {
   Application::Application() : m_Window("Hello Vulkan", WIDTH, HEIGHT) {
+    LoadModels();
     CreatePipelineLayout();
     CreatePipeline();
     CreateCommandBuffers();
@@ -91,8 +92,12 @@ namespace VKE {
       renderPassBeginInfo.pClearValues = clearValues.data();
 
       vkCmdBeginRenderPass(m_CommandBuffers[i], &renderPassBeginInfo, VK_SUBPASS_CONTENTS_INLINE);
+
       m_Pipeline->Bind(m_CommandBuffers[i]);
-      vkCmdDraw(m_CommandBuffers[i], 3, 1, 0, 0);
+      m_VertexBufferModel->Bind(m_CommandBuffers[i]);
+
+      vkCmdDraw(m_CommandBuffers[i], 6, 1, 0, 0);
+      m_VertexBufferModel->Draw(m_CommandBuffers[i]);
 
       vkCmdEndRenderPass(m_CommandBuffers[i]);
       if(vkEndCommandBuffer(m_CommandBuffers[i]) != VK_SUCCESS) {
@@ -113,5 +118,18 @@ namespace VKE {
     if(result != VK_SUCCESS) {
       throw std::runtime_error("failed to present swap chain image");
     }
+  }
+
+  void Application::LoadModels() {
+     std::vector<BufferModel::Vertex> vertices = {
+         {{0.5f, -0.5f}, {0.8f, 0.2f, 0.2f}},
+         {{-0.5f, 0.5f}, {0.2f, 0.8f, 0.2f}},
+         {{-0.5f, -0.5f}, {0.2f, 0.2f, 0.8f}},
+         {{0.5f, 0.5f}, {0.2f, 0.2f, 0.8f}},
+         {{-0.5f, 0.5f}, {0.2f, 0.8f, 0.2f}},
+         {{0.5f, -0.5f}, {0.8f, 0.2f, 0.2f}}
+     };
+
+     m_VertexBufferModel = std::make_unique<BufferModel>(m_Device, vertices);
   }
 } // VKE

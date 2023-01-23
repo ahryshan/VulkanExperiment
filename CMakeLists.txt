@@ -8,10 +8,11 @@ file(GLOB_RECURSE _VKE_SRCS src/*.cpp include/*.h assets/shaders/*.vert assets/s
 add_executable(VkExperiment ${_VKE_SRCS})
 
 add_subdirectory(vendor/glfw)
+add_subdirectory(vendor/glm)
 
-target_link_libraries(VkExperiment PUBLIC glfw vulkan)
+target_link_libraries(VkExperiment PUBLIC glfw vulkan glm)
 
-target_include_directories(VkExperiment PUBLIC include vendor/glfw/include)
+target_include_directories(VkExperiment PUBLIC include vendor/glfw/include vendor/glm)
 
 find_package(Vulkan COMPONENTS glslc REQUIRED)
 find_program(glslc_executable NAMES glslc HINTS Vulkan::glslc REQUIRED)

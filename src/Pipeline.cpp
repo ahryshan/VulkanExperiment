@@ -7,6 +7,8 @@
 #include <fstream>
 #include <iostream>
 
+#include "Core/BufferModel.h"
+
 namespace VKE {
   Pipeline::Pipeline(
       Device& device, const std::string& vertexShaderFilepath,
@@ -65,12 +67,15 @@ namespace VKE {
     shaderStages[1].pNext               = nullptr;
     shaderStages[1].pSpecializationInfo = nullptr;
 
+    auto bindingDescriptions   = BufferModel::Vertex::BindingDescription();
+    auto attributeDescriptions = BufferModel::Vertex::AttributeDescription();
+
     VkPipelineVertexInputStateCreateInfo vertexInputInfo{};
     vertexInputInfo.sType                           = VK_STRUCTURE_TYPE_PIPELINE_VERTEX_INPUT_STATE_CREATE_INFO;
-    vertexInputInfo.vertexAttributeDescriptionCount = 0;
-    vertexInputInfo.vertexBindingDescriptionCount   = 0;
-    vertexInputInfo.pVertexAttributeDescriptions    = nullptr;
-    vertexInputInfo.pVertexBindingDescriptions      = nullptr;
+    vertexInputInfo.vertexAttributeDescriptionCount = attributeDescriptions.size();
+    vertexInputInfo.vertexBindingDescriptionCount   = bindingDescriptions.size();
+    vertexInputInfo.pVertexAttributeDescriptions    = attributeDescriptions.data();
+    vertexInputInfo.pVertexBindingDescriptions      = bindingDescriptions.data();
 
     VkGraphicsPipelineCreateInfo pipelineInfo{};
     pipelineInfo.sType             = VK_STRUCTURE_TYPE_GRAPHICS_PIPELINE_CREATE_INFO;
@@ -90,7 +95,7 @@ namespace VKE {
     pipelineInfo.pRasterizationState = &configInfo.RasterizationInfo;
     pipelineInfo.pColorBlendState    = &configInfo.ColorBlendInfo;
     pipelineInfo.pDepthStencilState  = &configInfo.DepthStencilInfo;
-    pipelineInfo.pMultisampleState = &configInfo.MultisampleInfo;
+    pipelineInfo.pMultisampleState   = &configInfo.MultisampleInfo;
     pipelineInfo.pInputAssemblyState = &configInfo.InputAssemblyInfo;
 
     pipelineInfo.pDynamicState = nullptr;

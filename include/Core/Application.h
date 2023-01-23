@@ -14,6 +14,7 @@
 #include "Pipeline.h"
 #include "Device.h"
 #include "SwapChain.hpp"
+#include "BufferModel.h"
 
 namespace VKE {
 
@@ -29,6 +30,7 @@ namespace VKE {
     void Run();
 
   private:
+    void LoadModels();
     void CreatePipelineLayout();
     void CreatePipeline();
     void CreateCommandBuffers();
@@ -39,13 +41,13 @@ namespace VKE {
     static constexpr uint32_t WIDTH{800};
     static constexpr uint32_t HEIGHT{600};
 
-    Window   m_Window;
-    Device m_Device{m_Window};
-    SwapChain m_SwapChain{m_Device, m_Window.WindowExtent()};
-    std::unique_ptr<Pipeline> m_Pipeline;
-    VkPipelineLayout m_PipelineLayout;
+    Window                       m_Window;
+    Device                       m_Device{m_Window};
+    SwapChain                    m_SwapChain{m_Device, m_Window.WindowExtent()};
+    std::unique_ptr<Pipeline>    m_Pipeline;
+    VkPipelineLayout             m_PipelineLayout;
     std::vector<VkCommandBuffer> m_CommandBuffers;
-
+    std::unique_ptr<BufferModel> m_VertexBufferModel;
   };
 
 } // VKE
