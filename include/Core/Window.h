@@ -18,8 +18,16 @@ namespace VKE {
     ~Window();
 
     [[nodiscard]] inline bool ShouldClose() const { return glfwWindowShouldClose(m_WindowHandle); }
+    void CreateSurface(VkInstance instance, VkSurfaceKHR* surface);
+    VkExtent2D WindowExtent() const { return {m_Width, m_Height}; }
 
   private:
+    void InitWindow();
+
+    uint32_t m_Width;
+    uint32_t m_Height;
+
+    std::string m_WindowName;
     GLFWwindow* m_WindowHandle;
   };
 
